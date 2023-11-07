@@ -1,4 +1,6 @@
 from setuptools import find_packages, setup
+import os
+from glob import glob
 
 package_name = 'robile_safety_features'
 
@@ -23,4 +25,9 @@ setup(
             'my_node = robile_safety_features.my_node:main'
         ],
     },
+    data_files=[
+        # ... Other data files
+        # Include all launch files.
+        (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*launch.[pxy][yma]*')))
+    ]
 )
