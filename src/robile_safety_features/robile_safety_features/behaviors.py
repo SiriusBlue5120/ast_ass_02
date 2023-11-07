@@ -141,7 +141,10 @@ class LaserScan2bb(ptr.subscribers.ToBlackboard):
         
         # TODO: initialise class variables and blackboard variables
         ### YOUR CODE HERE ###
-        raise NotImplementedError()
+
+        self.blackboard.register_key(key='collision_condition', access=pt.common.Access.WRITE)
+
+        # raise NotImplementedError()
 
     def update(self):
         # TODO: impletment the update function to check the laser scan data and update the blackboard variable
