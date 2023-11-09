@@ -14,10 +14,10 @@ from robile_safety_features.behaviors import BatteryStatus2bb
 from robile_safety_features.behaviors import LaserScan2bb 
 
 def check_battery_low_on_blackboard(blackboard: pt.blackboard.Blackboard) -> bool:
-        return blackboard.battery_low_warning
+    return blackboard.battery_low_warning
 
 def check_collision(blackboard: pt.blackboard.Blackboard) -> bool:
-        return blackboard.collision_condition
+    return blackboard.collision_condition
 
 def create_root() -> pt.behaviour.Behaviour:
     """Structures a behavior tree to monitor the battery status, and start
