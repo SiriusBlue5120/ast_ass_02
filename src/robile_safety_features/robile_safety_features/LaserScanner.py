@@ -19,3 +19,17 @@ class LaserScanner(Node):
         self.get_logger().info(f"/scan: recieved 'ranges' of length {len(scan_ranges)}")
 
         return scan_ranges
+    
+
+def main(args=None):
+    rclpy.init(args=args)
+
+    laserScanner = LaserScanner()
+
+    rclpy.spin(laserScanner)
+
+    rclpy.shutdown()
+
+
+if __name__ == "__main__":
+    main()

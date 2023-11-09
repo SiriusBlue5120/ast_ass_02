@@ -12,6 +12,9 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        # ... Other data files
+        # Include all launch files.
+        (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*launch.[pxy][yma]*'))),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -22,12 +25,12 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'my_node = robile_safety_features.my_node:main'
+            # "<EXECUTABLE_NAME = <PACKAGE_NAME>.<MODULE_NAME>:<METHOD>",
+            'my_node = robile_safety_features.my_node:main',
+            # 'safety_monitoring_BT = robile_safety_features.safety_monitoring_BT:main'
+            # 'velcmd = robile_safety_features.VelCommand:main'
+            'scanner = robile_safety_features.LaserScanner:main',
+            # 'battmon = robile_safety_features.BatteryMonitor:main'
         ],
     },
-    data_files=[
-        # ... Other data files
-        # Include all launch files.
-        (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*launch.[pxy][yma]*')))
-    ]
 )
