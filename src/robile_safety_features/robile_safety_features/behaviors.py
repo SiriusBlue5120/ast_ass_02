@@ -10,6 +10,7 @@ from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSHistoryPolicy
 
 from BatteryMonitor import BatteryMonitor
 from LaserScanner import LaserScanner
+from VelCommand import VelCommand
 
 class Rotate(pt.behaviour.Behaviour):
     """Rotates the robot about the z-axis 
@@ -21,7 +22,15 @@ class Rotate(pt.behaviour.Behaviour):
         super(Rotate, self).__init__(name)
 
         # TODO: initialise class variables
-        raise NotImplementedError()
+
+        self.ang_vel = ang_vel
+        self.topic_name = topic_name
+
+        self.vel_command = VelCommand(topic_name=topic_name)
+
+        self.setup(node=self.vel_command)
+
+        # raise NotImplementedError()
 
     def setup(self, **kwargs):
         """Setting up things which generally might require time to prevent delay in the tree initialisation
@@ -37,6 +46,8 @@ class Rotate(pt.behaviour.Behaviour):
         # TODO: setup any necessary publishers or subscribers
 
         ### YOUR CODE HERE ###
+
+        self.vel_command.set_vel([0.0, 0.0, 0.0], [0.0, 0.0, 0.0])
 
         return True
 
@@ -54,7 +65,12 @@ class Rotate(pt.behaviour.Behaviour):
         # Hint: to return a status, for example, SUCCESS, pt.common.Status.SUCCESS can be used
 
         ### YOUR CODE HERE ###
-        raise NotImplementedError()
+
+        self.vel_command.set_vel([0.0, 0.0, 0.0], [0.0, 0.0, self.ang_vel])
+
+        return pt.common.Status.RUNNING
+
+        # raise NotImplementedError()
 
 
     def terminate(self, new_status):
@@ -67,6 +83,8 @@ class Rotate(pt.behaviour.Behaviour):
         # finishes its execution
 
         ### YOUR CODE HERE ###
+
+        self.vel_command.set_vel([0.0, 0.0, 0.0], [0.0, 0.0, 0.0])
 
         return super().terminate(new_status)
 
