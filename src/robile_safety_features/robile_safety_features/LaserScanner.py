@@ -5,11 +5,11 @@ from sensor_msgs.msg import LaserScan
 
 class LaserScanner(Node):
     def __init__(self):
-        super.__init__(node_name="lasermon")
+        super().__init__(node_name="lasermon")
 
         self.laser_subscriber = self.create_subscription(
             LaserScan, "/scan",
-            self.get_scan, 10
+            self.get_scan_ranges, 10
         )
 
     

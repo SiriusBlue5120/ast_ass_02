@@ -10,7 +10,8 @@ def generate_launch_description():
         Node(
             package='robile_safety_features',
             executable='scanner',
-            name='scanner'),
+            name='scanner',
+            output='screen'),
         # Node(
         #     package='robile_safety_features',
         #     executable='safety_monitoring_BT',
