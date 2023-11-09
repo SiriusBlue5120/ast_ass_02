@@ -8,6 +8,9 @@ from std_msgs.msg import Float32
 from sensor_msgs.msg import LaserScan
 from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSHistoryPolicy
 
+from BatteryMonitor import BatteryMonitor
+from LaserScanner import LaserScanner
+
 class Rotate(pt.behaviour.Behaviour):
     """Rotates the robot about the z-axis 
     """
@@ -95,7 +98,10 @@ class BatteryStatus2bb(ptr.subscribers.ToBlackboard):
         # TODO: initialise class variables
         ### YOUR CODE HERE ###
 
+        self.battery_subscriber = BatteryMonitor()
         self.battery_threshold = threshold
+
+        self.blackboard.battery_low_warning = False
 
         # raise NotImplementedError()
 
@@ -116,10 +122,13 @@ class BatteryStatus2bb(ptr.subscribers.ToBlackboard):
 
         ### YOUR CODE HERE ###
 
-        battery_voltage = self.blackboard.battery
-        
-        if battery_voltage < self.battery_threshold:
-            self.blackboard.battery_low_warning
+        self.blackboard.battery = self.battery_subscriber.get_battery()
+
+        if self.blackboard.battery < self.battery_threshold:
+            self.blackboard.battery_low_warning = True
+
+        else:
+            self.blackboard.battery_low_warning = False
 
         # raise NotImplementedError()
 
@@ -144,9 +153,20 @@ class LaserScan2bb(ptr.subscribers.ToBlackboard):
 
         self.blackboard.register_key(key='collision_condition', access=pt.common.Access.WRITE)
 
+        self.laser_scanner = LaserScanner()
+        self.safe_range = safe_range
+
         # raise NotImplementedError()
 
     def update(self):
         # TODO: impletment the update function to check the laser scan data and update the blackboard variable
         ### YOUR CODE HERE ###
-        raise NotImplementedError()
+
+        self.blackboard.laser_scan = self.laser_scanner.get_scan_ranges()
+
+        if any(self.blackboard.laser_scan < self.safe_range):
+            self.blackboard.collision_condition = True
+        else:
+            self.blackboard.collision_condition = False
+
+        # raise NotImplementedError()
