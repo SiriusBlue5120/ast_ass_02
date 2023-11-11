@@ -7,6 +7,8 @@ class VelCommand(Node):
     def __init__(self, topic_name="/cmd_vel"):
         super().__init__(node_name="velcommand")
 
+        self.verbose = True
+
         self.set_vel([0.0, 0.0, 0.0], [0.0, 0.0, 0.0])
 
         self.vel_publisher = self.create_publisher(Twist, topic_name, 10)
@@ -17,6 +19,14 @@ class VelCommand(Node):
     def set_vel(self, lin_vel, ang_vel):
         self.lin_vel = lin_vel
         self.ang_vel = ang_vel
+
+        if self.verbose:
+            self.get_logger().info(f"set velocity: {self.lin_vel} {self.ang_vel}")
+
+
+    def reset_vel(self):
+        self.lin_vel = [0.0, 0.0, 0.0]
+        self.ang_vel = [0.0, 0.0, 0.0]
 
 
     def publish_vel(self):
@@ -30,4 +40,21 @@ class VelCommand(Node):
         msg.angular.y = self.ang_vel[1]
         msg.angular.z = self.ang_vel[2]
 
+        if self.verbose:
+            self.get_logger().info(f"publish velocity: {msg}")
+
         self.vel_publisher.publish(msg)
+
+
+def main(args=None):
+    rclpy.init(args=args)
+
+    velcmd = VelCommand()
+
+    rclpy.spin(velcmd)
+
+    rclpy.shutdown()
+
+
+if __name__ == "__main__":
+    main()

@@ -26,11 +26,10 @@ setup(
     entry_points={
         'console_scripts': [
             # "<EXECUTABLE_NAME = <PACKAGE_NAME>.<MODULE_NAME>:<METHOD>",
-            'my_node = robile_safety_features.my_node:main',
-            # 'safety_monitoring_BT = robile_safety_features.safety_monitoring_BT:main'
-            # 'velcmd = robile_safety_features.VelCommand:main'
-            'scanner = robile_safety_features.LaserScanner:main',
-            # 'battmon = robile_safety_features.BatteryMonitor:main'
+            # 'my_node = robile_safety_features.my_node:main',
+            'safety_monitoring_BT = robile_safety_features.safety_monitoring_BT:main',
+            'safety_monitoring_SMACH = robile_safety_features.safety_monitoring_SMACH:main',
+            # 'velcmd = robile_safety_features.VelCommand:main',
         ],
     },
 )

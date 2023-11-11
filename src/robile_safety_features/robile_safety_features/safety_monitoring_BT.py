@@ -8,16 +8,7 @@ import py_trees.console as console
 import rclpy
 import sys
 from robile_safety_features.behaviors import *
-from robile_safety_features.behaviors import Rotate
-from robile_safety_features.behaviors import StopMotion
-from robile_safety_features.behaviors import BatteryStatus2bb
-from robile_safety_features.behaviors import LaserScan2bb 
 
-def check_battery_low_on_blackboard(blackboard: pt.blackboard.Blackboard) -> bool:
-    return blackboard.battery_low_warning
-
-def check_collision(blackboard: pt.blackboard.Blackboard) -> bool:
-    return blackboard.collision_condition
 
 def create_root() -> pt.behaviour.Behaviour:
     """Structures a behavior tree to monitor the battery status, and start
@@ -46,32 +37,23 @@ def create_root() -> pt.behaviour.Behaviour:
     """
 
     ### YOUR CODE HERE ###
-    battery2bb = BatteryStatus2bb()
-    laserScan2bb = LaserScan2bb()
 
     # TODO: construct the behavior tree structure using the nodes and behaviors defined above
     # HINT: for reference, the sample tree structure in the README.md file might be useful
-    rotate_platform = Rotate(name='RotatePlatform')
-    stop_platform = StopMotion(name='StopPlatform')
 
-    battery_emergency = pt.decorators.EternalGuard(
-        name="Battery Low?",
-        condition=check_battery_low_on_blackboard,
-        blackboard_keys={"battery_low_warning"},
-        child=rotate_platform
-    )
-    collision_emergency = pt.decorators.EternalGuard(
-        name="Colliding?",
-        condition=check_collision,
-        blackboard_keys={"collision_condition"},
-        child=stop_platform
-    )
-    
     root.add_children([topics2BB, priorities])
-    priorities.add_children([collision_emergency,battery_emergency,idle])
-    topics2BB.add_children([battery2bb,laserScan2bb])
 
     ### YOUR CODE HERE ###
+
+    # Topics2BB
+    battery2BB = BatteryStatus2bb()
+    scan2BB = LaserScan2bb()
+    topics2BB.add_children([battery2BB, scan2BB])
+
+    # Priorities
+    stopMotion = StopMotion("Collision Checking")
+    rotatePlatform = Rotate("Battery Emergency")
+    priorities.add_children([stopMotion, rotatePlatform, idle])
 
     return root
 
