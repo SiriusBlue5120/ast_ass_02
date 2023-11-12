@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 
 import rclpy
-from executive_smach.smach import smach
+#import executive_smach.smach.smach as smach
+import smach
 
 from robile_safety_features.VelCommand import VelCommand
 from robile_safety_features.Laser_scan import LaserScanSubscribe
 from robile_safety_features.Battery_voltage import BatteryVoltage
-from executive_smach.smach_ros.smach_ros import SmachNode
+#from executive_smach.smach_ros.smach_ros import SmachNode
 
 
 # Reference: https://wiki.ros.org/smach/Tutorials/Simple%20State%20Machine [but in ROS1]
@@ -19,6 +20,7 @@ class MonitorBatteryAndCollision(smach.State):
         ### YOUR CODE HERE ###
         smach.State.__init__(self, outcomes=['Battery_Low','Battery_High','Is_Colliding','Not_Colliding'],
                              input_keys=['battery_val','laser_val'])
+        
         
         self.battery_voltage_sub = BatteryVoltage()
         self.laser_scan_sub =  LaserScanSubscribe()
@@ -89,21 +91,24 @@ def main(args=None):
 
     # TODO: make it a ROS2 node, set any threshold values, and define state transitions
     ### YOUR CODE HERE ###
-    smachNode = SmachNode("State_Machine_node")
-    
+    rclpy.init(args=None)
+    #smachNode = SmachNode("State_Machine_node")
     state_machine = smach.StateMachine(outcomes=['Abort'])
     state_machine.userdata.battery_threshold=30
     state_machine.userdata.laser_threshold=0.25
     with state_machine:
-        smach.StateMachine.add('MonitorBatteryAndCollision', MonitorBatteryAndCollision(), 
+        smach.StateMachine.add('MonitorBatteryAndCollision', MonitorBatteryAndCollision(node=None), 
                                  transitions={'Battery_Low':'RotateBase', 'Battery_High':'MonitorBatteryAndCollision','Is_Colliding':'StopBase','Not_Colliding':'MonitorBatteryAndCollision'},
                                  remapping={'battery_threshold':'battery_threshold','laser_threshold':'laser_threshold'})
-        smach.StateMachine.add('RotateBase', RotateBase(), 
+        smach.StateMachine.add('RotateBase', RotateBase(node=None), 
                                  transitions={'Is_Rotating':'MonitorBatteryAndCollision'})
-        smach.StateMachine.add('StopBase', StopBase(), 
+        smach.StateMachine.add('StopBase', StopBase(node=None), 
                                  transitions={'Success':'MonitorBatteryAndCollision'})
 
     outcome = state_machine.execute()
+    #rclpy.spin(smachNode)
+    #smachNode.destroy_node()
+    rclpy.shutdown()
 
 if __name__ == "__main__":
     main()
