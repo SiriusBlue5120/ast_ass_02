@@ -19,7 +19,7 @@ class MonitorBatteryAndCollision(smach.State):
         # TODO: define outcomes, class variables, and desired publisher/subscribers
         ### YOUR CODE HERE ###
         smach.State.__init__(self, outcomes=['Battery_Low','Battery_High','Is_Colliding','Not_Colliding'],
-                             input_keys=['battery_val','laser_val'])
+                             input_keys=['battery_threshold','laser_threshold'])
         
         
         self.battery_voltage_sub = BatteryVoltage()
@@ -30,16 +30,16 @@ class MonitorBatteryAndCollision(smach.State):
         # TODO: implement state execution logic and return outcome
         ### YOUR CODE HERE ###
         laser_scan_range = self.laser_scan_sub.getLaserScanData()
-        curr_battery_vol = self.battery_voltage_sub.getBatteryVoltage()
+        curr_battery_val = self.battery_voltage_sub.getBatteryVoltage()
         laser_collide_cond=[scan_range < userdata.laser_threshold for scan_range in laser_scan_range]
             
         if True in laser_collide_cond:
             return 'Is_Colliding'
+        if userdata.battery_threshold > curr_battery_val:
+            return 'Battery_Low'
         if True not in laser_collide_cond:
             return 'Not_Colliding'
-        if userdata.battery_threshold > curr_battery_vol:
-            return 'Battery_Low'
-        else: 
+        if userdata.battery_threshold < curr_battery_val:
             return 'Battery_High'
         
         #raise NotImplementedError()
@@ -94,7 +94,7 @@ def main(args=None):
     rclpy.init(args=None)
     #smachNode = SmachNode("State_Machine_node")
     state_machine = smach.StateMachine(outcomes=['Abort'])
-    state_machine.userdata.battery_threshold=30
+    state_machine.userdata.battery_threshold=30.0
     state_machine.userdata.laser_threshold=0.25
     with state_machine:
         smach.StateMachine.add('MonitorBatteryAndCollision', MonitorBatteryAndCollision(node=None), 

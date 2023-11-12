@@ -9,16 +9,15 @@ class BatteryVoltage(Node):
     def __init__(self):
 
         super().__init__(node_name="battery_voltage_sub")
-        self.my_subscription = self.create_subscription(Float32(),"/battery_voltage",self.my_callback, 10)
-        self.msg = None
+        self.my_subscription = self.create_subscription(Float32,"/battery_voltage",self.my_callback, 10)
+        self.msg = {'data':100.0}
 
     def my_callback(self,msg) -> None:
         self.get_logger().info(f"Voltage received:{msg.data}")
         self.msg = msg
 
     def getBatteryVoltage(self):
-        if self.msg is not None:
-            return self.msg['data']
+        return self.msg['data']
     
 def main(agrs = None) -> None:
     rclpy.init(args=agrs)
