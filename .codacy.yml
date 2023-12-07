@@ -1,0 +1,6 @@
+---
+exclude_paths:
+ - "**/README.md"
+ - "**.zip"
+ - ".gitignore"
+ - ".github/"
