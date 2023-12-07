@@ -17,7 +17,7 @@ def create_root() -> pt.behaviour.Behaviour:
 
     # we define the root node
     root = pt.composites.Parallel(name="root",
-                                  policy=pt.common.ParallelPolicy.SuccessOnAll(synchronise=False))    
+                                  policy=pt.common.ParallelPolicy.SuccessOnAll(synchronise=False))
 
     ### we create a sequence node called "Topics2BB" and a selector node called "Priorities"
     topics2BB = pt.composites.Sequence("Topics2BB", memory=False)
@@ -25,7 +25,7 @@ def create_root() -> pt.behaviour.Behaviour:
 
     ### we create an "Idle" node, which is a running node to keep the robot idle
     idle = pt.behaviours.Running(name="Idle")
-    
+
     """
     TODO:  The first and second level of the tree structure is defined above, but please
     define the rest of the tree structure.
@@ -78,9 +78,9 @@ def main():
         tree.shutdown()
         rclpy.try_shutdown()
         sys.exit(1)
-    
+
     # frequency of ticks
-    tree.tick_tock(period_ms=100)    
+    tree.tick_tock(period_ms=100)
 
     try:
         rclpy.spin(tree.node)

@@ -14,7 +14,7 @@ import numpy as np
 
 
 class Rotate(pt.behaviour.Behaviour):
-    """Rotates the robot about the z-axis 
+    """Rotates the robot about the z-axis
     """
     def __init__(self, name="RotatePlatform",
                  topic_name="/cmd_vel",
@@ -24,7 +24,7 @@ class Rotate(pt.behaviour.Behaviour):
         super(Rotate, self).__init__(name)
 
         # TODO: initialise class variables
-        
+
         self.velcommand = VelCommand(topic_name=topic_name)
         self.max_ang_vel = ang_vel
 
@@ -36,12 +36,12 @@ class Rotate(pt.behaviour.Behaviour):
         """Setting up things which generally might require time to prevent delay in the tree initialisation
         """
         self.logger.info("[ROTATE] setting up rotate behavior")
-        
+
         try:
             self.node = kwargs['node']
         except KeyError as e:
             error_message = "didn't find 'node' in setup's kwargs [{}][{}]".format(self.qualified_name)
-            raise KeyError(error_message) from e 
+            raise KeyError(error_message) from e
 
         # TODO: setup any necessary publishers or subscribers
         ### YOUR CODE HERE ###
@@ -60,7 +60,7 @@ class Rotate(pt.behaviour.Behaviour):
         self.logger.info("[ROTATE] update: updating rotate behavior")
         self.logger.debug("%s.update()" % self.__class__.__name__)
 
-        # TODO: implement the primary function of the behavior and decide which status to return 
+        # TODO: implement the primary function of the behavior and decide which status to return
         # based on the structure of your behavior tree
 
         # Hint: to return a status, for example, SUCCESS, pt.common.Status.SUCCESS can be used
@@ -79,7 +79,7 @@ class Rotate(pt.behaviour.Behaviour):
                 return pt.common.Status.SUCCESS
 
             return pt.common.Status.RUNNING
-        
+
         else:
             if self.rotating:
                 self.velcommand.reset_vel()
@@ -89,15 +89,15 @@ class Rotate(pt.behaviour.Behaviour):
             self.feedback_message = "Battery level is OK"
 
             return pt.common.Status.FAILURE
-    
+
         # raise NotImplementedError()
 
 
     def terminate(self, new_status):
-        """Trigerred once the execution of the behavior finishes, 
+        """Trigerred once the execution of the behavior finishes,
         i.e. when the status changes from RUNNING to SUCCESS or FAILURE
         """
-        # TODO: implement the termination of the behavior, i.e. what should happen when the behavior 
+        # TODO: implement the termination of the behavior, i.e. what should happen when the behavior
         # finishes its execution
 
         ### YOUR CODE HERE ###
@@ -109,14 +109,14 @@ class Rotate(pt.behaviour.Behaviour):
             self.velcommand.publish_vel()
 
         return super().terminate(new_status)
-    
+
 
 
 class StopMotion(pt.behaviour.Behaviour):
     """Stops the robot when it is controlled using a joystick or with a cmd_vel command
     """
-    
-    # TODO: based on previous eexample, implement the behavior to stop the robot when it is controlled 
+
+    # TODO: based on previous eexample, implement the behavior to stop the robot when it is controlled
     # by sending a cmd_vel command (eg: teleop_twist_keyboard)
 
     ### YOUR CODE HERE ###
@@ -128,35 +128,35 @@ class StopMotion(pt.behaviour.Behaviour):
         super(StopMotion, self).__init__(name)
 
         # TODO: initialise class variables
-        
+
         self.velcommand = VelCommand(topic_name=topic_name)
 
         self.blackboard = blackboard
 
-    
+
     def update(self):
         """
         Checks the blackboard for collision and terminates robot motion
         """
         if self.blackboard.get("colliding"):
             self.feedback_message = "Collision imminent, stopping motion"
-            
+
             self.velcommand.reset_vel()
             self.velcommand.publish_vel()
 
             return pt.common.Status.RUNNING
-        
+
         else:
             self.feedback_message = "No imminent collision, standing by"
 
             return pt.common.Status.FAILURE
-        
-    
+
+
     def terminate(self, new_status):
         """
-        Triggered when behaviour status changes from RUNNING to SUCCESS 
+        Triggered when behaviour status changes from RUNNING to SUCCESS
         or FAILURE
-        """  
+        """
 
         return super().terminate(new_status)
 
@@ -193,8 +193,8 @@ class BatteryStatus2bb(ptr.subscribers.ToBlackboard):
         """
         self.logger.info('[BATTERY] update: running battery_status2bb update')
         self.logger.debug("%s.update()" % self.__class__.__name__)
-        
-        """check battery voltage level stored in self.blackboard.battery. By comparing with 
+
+        """check battery voltage level stored in self.blackboard.battery. By comparing with
         threshold value, update the value of self.blackboad.battery_low_warning
         """
 
@@ -221,8 +221,8 @@ class BatteryStatus2bb(ptr.subscribers.ToBlackboard):
             self.feedback_message = "Battery level is OK"
 
         return pt.common.Status.SUCCESS
-        
-        # raise NotImplementedError()            
+
+        # raise NotImplementedError()
 
 
 
@@ -232,7 +232,7 @@ class LaserScan2bb(ptr.subscribers.ToBlackboard):
     def __init__(self, topic_name: str="/scan",
                  name: str='Scan2BB',
                  safe_range: float=0.25):
-        
+
         init_scan = [float(safe_range*2)]
 
         super().__init__(name=name,
@@ -244,7 +244,7 @@ class LaserScan2bb(ptr.subscribers.ToBlackboard):
                          qos_profile=QoSProfile(reliability=QoSReliabilityPolicy.RMW_QOS_POLICY_RELIABILITY_BEST_EFFORT,
                                                 history=QoSHistoryPolicy.RMW_QOS_POLICY_HISTORY_KEEP_LAST,
                                                 depth=10))
-        
+
         # TODO: initialise class variables and blackboard variables
         ### YOUR CODE HERE ###
 
@@ -274,5 +274,5 @@ class LaserScan2bb(ptr.subscribers.ToBlackboard):
 
 
         return pt.common.Status.SUCCESS
-     
+
         # raise NotImplementedError()

@@ -18,7 +18,7 @@ class BatteryVoltage(Node):
 
     def getBatteryVoltage(self):
         return self.msg['data']
-    
+
 def main(agrs = None) -> None:
     rclpy.init(args=agrs)
     node = BatteryVoltage()

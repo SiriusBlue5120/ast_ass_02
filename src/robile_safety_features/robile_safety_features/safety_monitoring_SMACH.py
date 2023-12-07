@@ -20,11 +20,10 @@ class MonitorBatteryAndCollision(smach.State):
         ### YOUR CODE HERE ###
         smach.State.__init__(self, outcomes=['Battery_Low','Battery_High','Is_Colliding','Not_Colliding'],
                              input_keys=['battery_threshold','laser_threshold'])
-        
-        
+
         self.battery_voltage_sub = BatteryVoltage()
         self.laser_scan_sub =  LaserScanSubscribe()
-      
+
 
     def execute(self, userdata):
         # TODO: implement state execution logic and return outcome
@@ -32,7 +31,7 @@ class MonitorBatteryAndCollision(smach.State):
         laser_scan_range = self.laser_scan_sub.getLaserScanData()
         curr_battery_val = self.battery_voltage_sub.getBatteryVoltage()
         laser_collide_cond=[scan_range < userdata.laser_threshold for scan_range in laser_scan_range]
-            
+
         if True in laser_collide_cond:
             return 'Is_Colliding'
         if userdata.battery_threshold > curr_battery_val:
@@ -41,10 +40,10 @@ class MonitorBatteryAndCollision(smach.State):
             return 'Not_Colliding'
         if userdata.battery_threshold < curr_battery_val:
             return 'Battery_High'
-        
+
         #raise NotImplementedError()
 
-    
+
 class RotateBase(smach.State):
     """State to rotate the Robile base
     """
@@ -53,7 +52,7 @@ class RotateBase(smach.State):
         ### YOUR CODE HERE ###
         smach.State.__init__(self, outcomes=['Is_Rotating'])
         self.velCommand = VelCommand()
-        
+
         #raise NotImplementedError()
 
     def execute(self, userdata):
@@ -97,12 +96,12 @@ def main(args=None):
     state_machine.userdata.battery_threshold=30.0
     state_machine.userdata.laser_threshold=0.25
     with state_machine:
-        smach.StateMachine.add('MonitorBatteryAndCollision', MonitorBatteryAndCollision(node=None), 
+        smach.StateMachine.add('MonitorBatteryAndCollision', MonitorBatteryAndCollision(node=None),
                                  transitions={'Battery_Low':'RotateBase', 'Battery_High':'MonitorBatteryAndCollision','Is_Colliding':'StopBase','Not_Colliding':'MonitorBatteryAndCollision'},
                                  remapping={'battery_threshold':'battery_threshold','laser_threshold':'laser_threshold'})
-        smach.StateMachine.add('RotateBase', RotateBase(node=None), 
+        smach.StateMachine.add('RotateBase', RotateBase(node=None),
                                  transitions={'Is_Rotating':'MonitorBatteryAndCollision'})
-        smach.StateMachine.add('StopBase', StopBase(node=None), 
+        smach.StateMachine.add('StopBase', StopBase(node=None),
                                  transitions={'Success':'MonitorBatteryAndCollision'})
 
     outcome = state_machine.execute()
