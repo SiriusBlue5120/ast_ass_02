@@ -4,3 +4,4 @@ exclude_paths:
  - "**.zip"
  - ".gitignore"
  - ".github/"
+ - "src/**/test/"
