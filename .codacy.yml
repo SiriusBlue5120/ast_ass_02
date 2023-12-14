@@ -5,4 +5,4 @@ exclude_paths:
  - ".gitignore"
  - ".github/"
  - "src/**/test/"
- - "WS23_AST_Assignment_BehaviorTree_SMACH/"
+ - "WS23_AST_Assignment_BehaviorTree_SMACH"
