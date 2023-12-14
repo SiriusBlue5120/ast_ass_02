@@ -110,7 +110,7 @@ def main(args=None):
 
     # rclpy.spin(smachNode)
     # smachNode.destroy_node()
-    
+
     rclpy.shutdown()
 
 
