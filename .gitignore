@@ -1,13 +1,13 @@
 # Created by https://www.toptal.com/developers/gitignore/api/ros2,python,c,c++
 # Edit at https://www.toptal.com/developers/gitignore?templates=ros2,python,c,c++
 
-executive_smach/
-kelo_tulip/
-py_trees_ros/
-Robile/
-robile_description/
-robile_gazebo/
-robile_navigation/
+src/executive_smach/
+src/kelo_tulip/
+src/py_trees_ros/
+src/Robile/
+src/robile_description/
+src/robile_gazebo/
+src/robile_navigation/
 
 ### C ###
 # Prerequisites
