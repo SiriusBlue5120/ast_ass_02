@@ -5,9 +5,7 @@ from std_msgs.msg import Float32
 
 
 class BatteryVoltage(Node):
-
     def __init__(self):
-
         super().__init__(node_name="battery_voltage_sub")
         self.my_subscription = self.create_subscription(Float32,"/battery_voltage",self.my_callback, 10)
         self.msg = {'data':100.0}
@@ -23,8 +21,9 @@ def main(agrs = None) -> None:
     rclpy.init(args=agrs)
     node = BatteryVoltage()
     rclpy.spin(node)
-    node.destroy_node() #clean memory this is optional
+    node.destroy_node() # Clean memory this is optional
     rclpy.shutdown()
+
 
 if __name__ == "__main__":
     main()

@@ -97,7 +97,8 @@ def main(args=None):
     state_machine.userdata.laser_threshold=0.25
     with state_machine:
         smach.StateMachine.add('MonitorBatteryAndCollision', MonitorBatteryAndCollision(node=None),
-                                 transitions={'Battery_Low':'RotateBase', 'Battery_High':'MonitorBatteryAndCollision','Is_Colliding':'StopBase','Not_Colliding':'MonitorBatteryAndCollision'},
+                                 transitions={'Battery_Low':'RotateBase', 'Battery_High':'MonitorBatteryAndCollision',
+                                              'Is_Colliding':'StopBase','Not_Colliding':'MonitorBatteryAndCollision'},
                                  remapping={'battery_threshold':'battery_threshold','laser_threshold':'laser_threshold'})
         smach.StateMachine.add('RotateBase', RotateBase(node=None),
                                  transitions={'Is_Rotating':'MonitorBatteryAndCollision'})
@@ -105,9 +106,10 @@ def main(args=None):
                                  transitions={'Success':'MonitorBatteryAndCollision'})
 
     outcome = state_machine.execute()
-    #rclpy.spin(smachNode)
-    #smachNode.destroy_node()
+    # rclpy.spin(smachNode)
+    # smachNode.destroy_node()
     rclpy.shutdown()
+
 
 if __name__ == "__main__":
     main()

@@ -1,6 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import String
+# from std_msgs.msg import String
 from sensor_msgs.msg import LaserScan
 
 
@@ -18,7 +18,7 @@ class LaserScanSubscribe(Node):
 
     def getLaserScanData(self):
         return self.msg.ranges
-    
+
 def main(agrs = None) -> None:
     rclpy.init(args=agrs)
     node = LaserScanSubscribe()
@@ -26,6 +26,6 @@ def main(agrs = None) -> None:
     node.destroy_node() #clean memory this is optional
     rclpy.shutdown()
 
+
 if __name__ == "__main__":
     main()
-

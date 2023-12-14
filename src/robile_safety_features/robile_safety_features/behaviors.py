@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
 
-from py_trees import common
-import rclpy
+# from py_trees import common
+# import rclpy
 import py_trees as pt
-import py_trees_ros as ptr
-from geometry_msgs.msg import Twist
-from std_msgs.msg import Float32
+from rclpy.qos import QoSHistoryPolicy, QoSProfile, QoSReliabilityPolicy
 from sensor_msgs.msg import LaserScan
-from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSHistoryPolicy
+# from geometry_msgs.msg import Twist
+from std_msgs.msg import Float32
 
+import py_trees_ros as ptr
 from robile_safety_features.VelCommand import VelCommand
-import numpy as np
+
+# import numpy as np
 
 
 class Rotate(pt.behaviour.Behaviour):
@@ -40,7 +41,7 @@ class Rotate(pt.behaviour.Behaviour):
         try:
             self.node = kwargs['node']
         except KeyError as e:
-            error_message = "didn't find 'node' in setup's kwargs [{}][{}]".format(self.qualified_name)
+            error_message = "didn't find 'node' in setup's kwargs [{}]".format(self.qualified_name)
             raise KeyError(error_message) from e
 
         # TODO: setup any necessary publishers or subscribers
@@ -121,9 +122,9 @@ class StopMotion(pt.behaviour.Behaviour):
 
     ### YOUR CODE HERE ###
 
-    def __init__(self, name="Collision Checking",
-                 topic_name="/cmd_vel",
-                 blackboard=pt.blackboard.Blackboard()):
+    def __init__(self, name = "Collision Checking",
+                 topic_name = "/cmd_vel",
+                 blackboard = pt.blackboard.Blackboard()):
         # inherit all the class variables from the parent class and make it a behavior
         super(StopMotion, self).__init__(name)
 
@@ -166,16 +167,16 @@ class BatteryStatus2bb(ptr.subscribers.ToBlackboard):
     """
     Checks the battery status
     """
-    def __init__(self, battery_voltage_topic_name: str="/battery_voltage",
-                 name: str='Battery2BB',
-                 threshold: float=30.0):
+    def __init__(self, battery_voltage_topic_name: str = "/battery_voltage",
+                 name: str = 'Battery2BB',
+                 threshold: float = 30.0):
         super().__init__(name=name,
-                         topic_name=battery_voltage_topic_name,
-                         topic_type=Float32,
-                         blackboard_variables={'battery': 'data'},
-                         initialise_variables={'battery': 100.0},
-                         clearing_policy=pt.common.ClearingPolicy.NEVER,  # to decide when data should be cleared/reset.
-                         qos_profile=ptr.utilities.qos_profile_unlatched())
+                         topic_name = battery_voltage_topic_name,
+                         topic_type = Float32,
+                         blackboard_variables = {'battery': 'data'},
+                         initialise_variables = {'battery': 100.0},
+                         clearing_policy = pt.common.ClearingPolicy.NEVER,  # to decide when data should be cleared/reset.
+                         qos_profile = ptr.utilities.qos_profile_unlatched())
         self.blackboard.register_key(key='battery_low_warning', access=pt.common.Access.WRITE)
 
         # TODO: initialise class variables
@@ -194,9 +195,8 @@ class BatteryStatus2bb(ptr.subscribers.ToBlackboard):
         self.logger.info('[BATTERY] update: running battery_status2bb update')
         self.logger.debug("%s.update()" % self.__class__.__name__)
 
-        """check battery voltage level stored in self.blackboard.battery. By comparing with
-        threshold value, update the value of self.blackboad.battery_low_warning
-        """
+        # Check battery voltage level stored in self.blackboard.battery. By comparing with
+        # threshold value, update the value of self.blackboad.battery_low_warning
 
         # TODO: based on the battery voltage level, update the value of self.blackboard.battery_low_warning
         # and return the status of the behavior based on your logic of the behavior tree
@@ -229,9 +229,9 @@ class BatteryStatus2bb(ptr.subscribers.ToBlackboard):
 class LaserScan2bb(ptr.subscribers.ToBlackboard):
     """Checks the laser scan measurements to avoid possible collisions.
     """
-    def __init__(self, topic_name: str="/scan",
-                 name: str='Scan2BB',
-                 safe_range: float=0.25):
+    def __init__(self, topic_name: str = "/scan",
+                 name: str = 'Scan2BB',
+                 safe_range: float = 0.25):
 
         init_scan = [float(safe_range*2)]
 
