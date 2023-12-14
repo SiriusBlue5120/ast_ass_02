@@ -23,7 +23,7 @@ jobs:
         with:
           output: results.sarif
           path: |
-            "src/**/robile_safety_features
+            "src/**/robile_safety_features"
             "!**/README.md"
             "!**.zip"
             "!.gitignore"
