@@ -106,8 +106,11 @@ def main(args=None):
                                  transitions={'Success':'MonitorBatteryAndCollision'})
 
     outcome = state_machine.execute()
+    print(f"Outcome: {outcome}")
+
     # rclpy.spin(smachNode)
     # smachNode.destroy_node()
+    
     rclpy.shutdown()
 
 
