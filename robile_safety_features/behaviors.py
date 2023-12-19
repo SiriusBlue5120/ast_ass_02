@@ -83,7 +83,7 @@ class Rotate(pt.behaviour.Behaviour):
 
         else:
             if self.rotating:
-                self.velcommand.reset_vel()
+                self.velcommand.reverse_motion()
                 self.velcommand.publish_vel()
                 self.rotating = False
 

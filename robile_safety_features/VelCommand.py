@@ -29,6 +29,11 @@ class VelCommand(Node):
         self.ang_vel = [0.0, 0.0, 0.0]
 
 
+    def reverse_motion(self):
+        self.lin_vel = [-0.25, 0.0, 0.0]
+        self.ang_vel = [0.0, 0.0, 0.0]
+
+
     def publish_vel(self):
         msg = Twist()
 
