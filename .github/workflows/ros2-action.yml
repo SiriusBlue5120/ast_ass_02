@@ -25,6 +25,7 @@ jobs:
           required-ros-distributions: humble
       # - run: rosinstall_generator robile_safety_features --rosdistro humble --deps-only --deps --upstream-development > /tmp/deps.repos
       # - run: "source /opt/ros/humble/setup.bash && ros2 run --help"
+      - run: "pip install py-trees py-trees-ros"
       - name: Build and Test
         uses: ros-tooling/action-ros-ci@v0.3
         with:
