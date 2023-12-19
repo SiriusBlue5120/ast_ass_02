@@ -58,7 +58,7 @@ class RotateBase(smach.State):
     def execute(self, userdata):
         # TODO: implement state execution logic and return outcome
         ### YOUR CODE HERE ###
-        self.velCommand.set_vel([0.0,0.0,0.0],[0.0,0.0,0.5])
+        self.velCommand.set_vel([0.0, 0.0, 0.0], [0.0, 0.0, 0.5])
         self.velCommand.publish_vel()
         return 'Is_Rotating'
         #raise NotImplementedError()
@@ -93,11 +93,11 @@ def main(args=None):
     rclpy.init(args=None)
     #smachNode = SmachNode("State_Machine_node")
     state_machine = smach.StateMachine(outcomes=['Abort'])
-    state_machine.userdata.battery_threshold=30.0
-    state_machine.userdata.laser_threshold=0.25
+    state_machine.userdata.battery_threshold = 30.0
+    state_machine.userdata.laser_threshold = 0.25
 
     transitions = {
-        'Battery_Low': 'RotateBase', 
+        'Battery_Low': 'RotateBase',
         'Battery_High': 'MonitorBatteryAndCollision',
         'Is_Colliding': 'StopBase',
         'Not_Colliding': 'MonitorBatteryAndCollision'
@@ -106,7 +106,7 @@ def main(args=None):
         'battery_threshold': 'battery_threshold',
         'laser_threshold': 'laser_threshold'
         }
-    
+
     with state_machine:
         smach.StateMachine.add('MonitorBatteryAndCollision', MonitorBatteryAndCollision(node=None),
                                 transitions=transitions,
