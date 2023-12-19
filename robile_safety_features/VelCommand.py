@@ -8,6 +8,8 @@ class VelCommand(Node):
         super().__init__(node_name="velcommand")
 
         self.verbose = True
+        self.lin_vel = None
+        self.ang_vel = None
 
         self.set_vel([0.0, 0.0, 0.0], [0.0, 0.0, 0.0])
 
@@ -30,6 +32,9 @@ class VelCommand(Node):
 
 
     def reverse_motion(self):
+        '''
+        This function makes the robot move backwards.
+        '''
         self.lin_vel = [-0.25, 0.0, 0.0]
         self.ang_vel = [0.0, 0.0, 0.0]
 
