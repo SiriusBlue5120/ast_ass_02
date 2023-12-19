@@ -22,7 +22,7 @@ jobs:
           install-connext: true
           use-ros2-testing: true
           required-ros-distributions: humble
-      - run: rosinstall_generator robile_safety_features --rosdistro <target-distro> --deps-only --deps --upstream-development > /tmp/deps.repos
+      - run: rosinstall_generator robile_safety_features --rosdistro humble --deps-only --deps --upstream-development > /tmp/deps.repos
       - run: "source /opt/ros/humble/setup.bash && ros2 run --help"
       - name: Build and Test
         uses: ros-tooling/action-ros-ci@v0.2
