@@ -30,4 +30,5 @@ jobs:
         with:
           package-name: robile_safety_features
           target-ros2-distro: humble
+          vcs-repo-file-url: https://raw.githubusercontent.com/ros2/ros2/humble/ros2.repos
           # vcs-repo-file-url: /tmp/deps.repos
