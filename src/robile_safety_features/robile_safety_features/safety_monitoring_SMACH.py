@@ -95,15 +95,26 @@ def main(args=None):
     state_machine = smach.StateMachine(outcomes=['Abort'])
     state_machine.userdata.battery_threshold=30.0
     state_machine.userdata.laser_threshold=0.25
+
+    transitions = {
+        'Battery_Low': 'RotateBase', 
+        'Battery_High': 'MonitorBatteryAndCollision',
+        'Is_Colliding': 'StopBase',
+        'Not_Colliding': 'MonitorBatteryAndCollision'
+        }
+    remapping = {
+        'battery_threshold': 'battery_threshold',
+        'laser_threshold': 'laser_threshold'
+        }
+    
     with state_machine:
         smach.StateMachine.add('MonitorBatteryAndCollision', MonitorBatteryAndCollision(node=None),
-                                 transitions={'Battery_Low':'RotateBase', 'Battery_High':'MonitorBatteryAndCollision',
-                                              'Is_Colliding':'StopBase','Not_Colliding':'MonitorBatteryAndCollision'},
-                                 remapping={'battery_threshold':'battery_threshold','laser_threshold':'laser_threshold'})
+                                transitions=transitions,
+                                remapping=remapping)
         smach.StateMachine.add('RotateBase', RotateBase(node=None),
-                                 transitions={'Is_Rotating':'MonitorBatteryAndCollision'})
+                                transitions={'Is_Rotating': 'MonitorBatteryAndCollision'})
         smach.StateMachine.add('StopBase', StopBase(node=None),
-                                 transitions={'Success':'MonitorBatteryAndCollision'})
+                                transitions={'Success': 'MonitorBatteryAndCollision'})
 
     outcome = state_machine.execute()
     print(f"Outcome: {outcome}")

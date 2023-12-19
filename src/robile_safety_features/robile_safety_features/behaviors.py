@@ -40,9 +40,9 @@ class Rotate(pt.behaviour.Behaviour):
 
         try:
             self.node = kwargs['node']
-        except KeyError as e:
+        except KeyError as error:
             error_message = "didn't find 'node' in setup's kwargs [{}]".format(self.qualified_name)
-            raise KeyError(error_message) from e
+            raise KeyError(error_message) from error
 
         # TODO: setup any necessary publishers or subscribers
         ### YOUR CODE HERE ###
@@ -122,9 +122,9 @@ class StopMotion(pt.behaviour.Behaviour):
 
     ### YOUR CODE HERE ###
 
-    def __init__(self, name = "Collision Checking",
-                 topic_name = "/cmd_vel",
-                 blackboard = pt.blackboard.Blackboard()):
+    def __init__(self, name="Collision Checking",
+                 topic_name="/cmd_vel",
+                 blackboard=pt.blackboard.Blackboard()):
         # inherit all the class variables from the parent class and make it a behavior
         super(StopMotion, self).__init__(name)
 
@@ -171,12 +171,12 @@ class BatteryStatus2bb(ptr.subscribers.ToBlackboard):
                  name: str = 'Battery2BB',
                  threshold: float = 30.0):
         super().__init__(name=name,
-                         topic_name = battery_voltage_topic_name,
-                         topic_type = Float32,
-                         blackboard_variables = {'battery': 'data'},
-                         initialise_variables = {'battery': 100.0},
-                         clearing_policy = pt.common.ClearingPolicy.NEVER,  # to decide when data should be cleared/reset.
-                         qos_profile = ptr.utilities.qos_profile_unlatched())
+                         topic_name=battery_voltage_topic_name,
+                         topic_type=Float32,
+                         blackboard_variables={'battery': 'data'},
+                         initialise_variables={'battery': 100.0},
+                         clearing_policy=pt.common.ClearingPolicy.NEVER,  # to decide when data should be cleared/reset.
+                         qos_profile=ptr.utilities.qos_profile_unlatched())
         self.blackboard.register_key(key='battery_low_warning', access=pt.common.Access.WRITE)
 
         # TODO: initialise class variables
