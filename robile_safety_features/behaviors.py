@@ -83,7 +83,7 @@ class Rotate(pt.behaviour.Behaviour):
 
         else:
             if self.rotating:
-                self.velcommand.reverse_motion()
+                self.velcommand.reset_vel()
                 self.velcommand.publish_vel()
                 self.rotating = False
 
@@ -142,7 +142,7 @@ class StopMotion(pt.behaviour.Behaviour):
         if self.blackboard.get("colliding"):
             self.feedback_message = "Collision imminent, stopping motion"
 
-            self.velcommand.reset_vel()
+            self.velcommand.reverse_motion()
             self.velcommand.publish_vel()
 
             return pt.common.Status.RUNNING
