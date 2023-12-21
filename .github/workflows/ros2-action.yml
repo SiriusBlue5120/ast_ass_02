@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - main
+      - directory-fix
   push:
     branches:
       - main
